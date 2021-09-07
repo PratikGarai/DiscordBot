@@ -5,6 +5,17 @@ intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+@bot.listen()
+async def on_ready() :
+    print("Bot ready for deployment")
+
+
+@bot.listen()
+async def on_guild_join(message: discord.Message) :
+    print(f"Joined server {message.guild.name}")
+    await message.channel.send("Hello!")
+
+
 @bot.command(name="mcount")
 async def member_count(ctx : commands.Context):
     await ctx.send(f"Member count : {ctx.message.guild.member_count}")
@@ -26,6 +37,6 @@ async def member_stats(ctx : commands.Context):
             idle += 1
 
     await ctx.send(
-        f"```Members : {len(members)}\nOnline members : {online}\nOffline members : {offline}\nIdle/Hidden : {idle}```")
+        f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
 
 bot.run(token)
