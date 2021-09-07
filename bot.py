@@ -1,21 +1,11 @@
 import discord
-from discord import channel
+from discord.ext import commands
 
 token = open("token.txt", "r").read()
-client = discord.Client()
+bot = commands.Bot(command_prefix='$')
 
-@client.event
-async def on_ready():
-    print(f"We have logged in as {client.user}")
+@bot.command()
+async def test(ctx, arg):
+    await ctx.send(arg)
 
-@client.event
-async def on_message(message : discord.Message):
-
-    if message.author==client.user :
-        print(f"Self message")
-    
-    if message.content=="Commands.member_count" :
-        print("Memeber count called")
-        await message.channel.send(f"There are {message.guild.member_count} members in your server")
-
-client.run(token)
+bot.run(token)
