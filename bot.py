@@ -21,6 +21,9 @@ async def on_message(message : discord.Message) :
     if message.author==bot.user :
         return 
     
+    if not message.content[0].isalpha() :
+        return 
+    
     if modules["sarcasm"] :
         res = sarcasm.get_sarcasm(message.content)
         if res["result"] : 
@@ -31,9 +34,8 @@ async def on_message(message : discord.Message) :
 
 
 @bot.listen()
-async def on_guild_join(message: discord.Message) :
-    print(f"Joined server {message.guild.name}")
-    await message.channel.send("Hello!")
+async def on_guild_join(guild) :
+    print(f"Joined server {guild.name}")
 
 
 @bot.command(name="mcount")
