@@ -2,14 +2,16 @@ import discord
 from discord.ext import commands
 
 from SarcasmModel import SarcasmModel as SarcasmModule
+from HydraModule import HydraModule
 
 intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 modules = {
-    "sarcasm" : True
+    "sarcasm" : False
 }
+
 
 @bot.listen()
 async def on_ready() :
@@ -21,16 +23,18 @@ async def on_message(message : discord.Message) :
     if message.author==bot.user :
         return 
     
-    if not message.content[0].isalpha() :
-        return 
+    try : 
+        if not message.content[0].isalpha() :
+            return 
     
-    if modules["sarcasm"] :
-        res = sarcasm.get_sarcasm(message.content)
-        if res["result"] : 
-            await message.add_reaction("😎")
-        else :
-            await message.add_reaction("😐")
-
+        if modules["sarcasm"] :
+            res = sarcasm.get_sarcasm(message.content)
+            if res["result"] : 
+                await message.add_reaction("😎")
+            else :
+                await message.add_reaction("😐")
+    except : 
+        pass
 
 
 @bot.listen()
@@ -62,5 +66,11 @@ async def member_stats(ctx : commands.Context):
         f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
 
 
+@bot.command(name="clear_list")
+async def make_playlist(ctx : commands.Context, number_of_tracks : int):
+    await hydra.clear_fav(number_of_tracks, ctx)
+
+
 sarcasm = SarcasmModule()
+hydra = HydraModule(".")
 bot.run(token)
