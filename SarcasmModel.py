@@ -6,10 +6,11 @@ import pickle
 class SarcasmModel : 
 
     def __init__(self) :
-        self.model = self.get_model()
-        self.tokenizer = self.get_tokenizer()
         self.max_length = 15
         self.max_words = 20000
+        self.model = self.get_model()
+        self.tokenizer = self.get_tokenizer()
+        self.test()                             # Launches the model to load it to RAM properly
 
 
     def get_model(self) :
@@ -44,6 +45,33 @@ class SarcasmModel :
         result = self.model.predict(padded)
 
         if result>0.5 :
-            return True, result
+            return {
+                "result" : True, 
+                "score" : result[0][0]
+            }
         else :
-            return False, result
+            return {
+                "result" : False, 
+                "score" : result[0][0]
+            }
+    
+
+    def test(self) :
+        test_sentences = [
+                  'granny starting to fear that spiders in the garden might be real',
+                  'the weather today is bright and sunny'
+        ]
+        for i in test_sentences :
+            self.get_sarcasm(i)
+
+
+
+if __name__=="__main__" :
+    test_sentences = [
+                  'granny starting to fear that spiders in the garden might be real',
+                  'the weather today is bright and sunny'
+    ]
+
+    s = SarcasmModel()
+    for i in test_sentences :
+        print(s.get_sarcasm(i))
