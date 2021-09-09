@@ -1,13 +1,33 @@
 import discord
 from discord.ext import commands
 
+from SarcasmModel import SarcasmModel as SarcasmModule
+
 intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+modules = {
+    "sarcasm" : True
+}
+
 @bot.listen()
 async def on_ready() :
     print("Bot ready for deployment")
+
+
+@bot.listen()
+async def on_message(message : discord.Message) :
+    if message.author==bot.user :
+        return 
+    
+    if modules["sarcasm"] :
+        res = sarcasm.get_sarcasm(message.content)
+        if res["result"] : 
+            await message.add_reaction("😎")
+        else :
+            await message.add_reaction("😐")
+
 
 
 @bot.listen()
@@ -39,4 +59,6 @@ async def member_stats(ctx : commands.Context):
     await ctx.send(
         f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
 
+
+sarcasm = SarcasmModule()
 bot.run(token)
