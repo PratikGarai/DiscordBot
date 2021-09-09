@@ -2,14 +2,13 @@ import discord
 from discord.ext import commands
 
 from SarcasmModel import SarcasmModel as SarcasmModule
-from HydraModule import HydraModule
 
 intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 modules = {
-    "sarcasm" : False
+    "sarcasm" : True
 }
 
 
@@ -66,11 +65,5 @@ async def member_stats(ctx : commands.Context):
         f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
 
 
-@bot.command(name="clear_list")
-async def make_playlist(ctx : commands.Context, number_of_tracks : int):
-    await hydra.clear_fav(number_of_tracks, ctx)
-
-
 sarcasm = SarcasmModule()
-hydra = HydraModule(".")
 bot.run(token)
