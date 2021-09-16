@@ -1,4 +1,4 @@
-from SarcasmModel import SarcasmModel as SarcasmModule
+from SarcasmModule import SarcasmModel as SarcasmModule
 from StatsModule import StatsModule
 
 states = {
