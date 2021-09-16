@@ -64,7 +64,10 @@ async def member_count(ctx : commands.Context):
     if len(modules.keys())!=0 :
         s = "```Here is the list of available modules :"
         for ind, i in enumerate(modules.keys()) :
-            s += f"\n\t{ind}.\t {i}"
+            if modules[i] :
+                s += f"\n\t{ind}.\t(ON)  {i}"
+            else :
+                s += f"\n\t{ind}.\t(OFF) {i}"
         s += "\n```"
         await ctx.send(s)
     else :
