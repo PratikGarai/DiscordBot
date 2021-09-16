@@ -58,6 +58,19 @@ async def member_count(ctx : commands.Context, module : str):
             await ctx.send(f"```Sorry sir, that module doesn't exist. 🙁```")
 
 
+@bot.command(name="modlist")
+async def member_count(ctx : commands.Context):
+    await ctx.message.add_reaction("👌")
+    if len(modules.keys())!=0 :
+        s = "```Here is the list of available modules :"
+        for ind, i in enumerate(modules.keys()) :
+            s += f"\n\t{ind}.\t {i}"
+        s += "\n```"
+        await ctx.send(s)
+    else :
+        await ctx.send("No modules found 🙁")
+
+
 @bot.command(name="mcount")
 async def member_count(ctx : commands.Context):
     if modules["stats"] :
