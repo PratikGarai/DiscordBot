@@ -4,14 +4,14 @@ from discord.ext import commands
 intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
+admin_id = int(open("admin_id.txt", "r").read())
 
 
-from SarcasmModel import SarcasmModel as SarcasmModule
-from StatsModule import memberCounter, memberStatistics
+from modules_states import states
 
 modules = {
-    "sarcasm" : SarcasmModule(),
-    "stats" : True
+    "sarcasm" : None,
+    "stats" : None
 }
 
 
@@ -41,14 +41,28 @@ async def on_message(message : discord.Message) :
 
 @bot.command(name="toggle")
 async def member_count(ctx : commands.Context, module : str):
-    print(ctx.author.id)
+    if ctx.author.id!=admin_id :
+        await ctx.message.add_reaction("⛔")
+        await ctx.send(f"```Sorry, you do not have such authority. 👮```")
+    else :
+        await ctx.message.add_reaction("👌")
+        if module in modules : 
+            if modules[module] :
+                new_state = "off"
+                modules[module] = None
+            else :
+                new_state = "on"
+                modules[module] = states[module]
+            await ctx.send(f"```Sure sir! 👍\nTurned {new_state} module : {module}```")
+        else :
+            await ctx.send(f"```Sorry sir, that module doesn't exist. 🙁```")
 
 
 @bot.command(name="mcount")
 async def member_count(ctx : commands.Context):
     if modules["stats"] :
-        count = await memberCounter(ctx)
-        await ctx.send(f"Member count : {count}")
+        count = await modules["stats"].memberCounter(ctx)
+        await ctx.send(f"```Member count : {count}```")
     else :
         await ctx.send("```Command is blocked for now```")
 
@@ -56,7 +70,7 @@ async def member_count(ctx : commands.Context):
 @bot.command(name="mstats")
 async def member_stats(ctx : commands.Context):
     if modules["stats"] :
-        online, offline, idle, members = await memberStatistics(ctx)
+        online, offline, idle, members = await modules["stats"].memberStatistics(ctx)
         await ctx.send(
             f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
     else :

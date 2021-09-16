@@ -1,4 +1,5 @@
 *.swp
 token.txt
+admin_id.txt
 venv
 __pycache__
