@@ -11,7 +11,8 @@ from modules_states import states
 
 modules = {
     "sarcasm" : None,
-    "stats" : None
+    "stats" : None,
+    "connect4" :None 
 }
 
 
@@ -69,7 +70,7 @@ async def allOn(ctx : commands.Context):
         await ctx.send(f"```Sure sir! 👍\nTurned on all modules```")
 
 
-@bot.command(name="modAllOn")
+@bot.command(name="modAllOff")
 async def allOff(ctx : commands.Context):
     if ctx.author.id!=admin_id :
         await ctx.message.add_reaction("⛔")
@@ -81,7 +82,7 @@ async def allOff(ctx : commands.Context):
         await ctx.send(f"```Sure sir! 👍\nTurned off all modules```")
 
 
-@bot.command(name="modlist")
+@bot.command(name="modList")
 async def member_count(ctx : commands.Context):
     await ctx.message.add_reaction("👌")
     if len(modules.keys())!=0 :
@@ -117,6 +118,17 @@ async def member_stats(ctx : commands.Context):
 
 @bot.command(name="startc4")
 async def connect4play(ctx : commands.Context, player1, player2) :
-    pass
+    if modules["connect4"] :
+        g = modules["connect4"]
+        if g.ongoing :
+            await ctx.send(f"Sorry, ongoing game between {g.player1} and {g.player2}")
+        else :
+            f = g.start_game(player1, player2)
+            if f : 
+                await ctx.send(f"Starting game between {player1} and {player2}")
+            else :
+                await ctx.send("Invalid players to start game")
+    else :
+        await ctx.send("```Command is blocked for now```")
 
 bot.run(token)
