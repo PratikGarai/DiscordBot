@@ -40,7 +40,7 @@ async def on_message(message : discord.Message) :
 
 
 @bot.command(name="toggle")
-async def member_count(ctx : commands.Context, module : str):
+async def toggler(ctx : commands.Context, module : str):
     if ctx.author.id!=admin_id :
         await ctx.message.add_reaction("⛔")
         await ctx.send(f"```Sorry, you do not have such authority. 👮```")
@@ -56,6 +56,29 @@ async def member_count(ctx : commands.Context, module : str):
             await ctx.send(f"```Sure sir! 👍\nTurned {new_state} module : {module}```")
         else :
             await ctx.send(f"```Sorry sir, that module doesn't exist. 🙁```")
+    
+@bot.command(name="modAllOn")
+async def allOn(ctx : commands.Context):
+    if ctx.author.id!=admin_id :
+        await ctx.message.add_reaction("⛔")
+        await ctx.send(f"```Sorry, you do not have such authority. 👮```")
+    else :
+        await ctx.message.add_reaction("👌")
+        for module in modules : 
+            modules[module] = states[module]
+        await ctx.send(f"```Sure sir! 👍\nTurned on all modules```")
+
+
+@bot.command(name="modAllOn")
+async def allOff(ctx : commands.Context):
+    if ctx.author.id!=admin_id :
+        await ctx.message.add_reaction("⛔")
+        await ctx.send(f"```Sorry, you do not have such authority. 👮```")
+    else :
+        await ctx.message.add_reaction("👌")
+        for module in modules : 
+            modules[module] = None
+        await ctx.send(f"```Sure sir! 👍\nTurned off all modules```")
 
 
 @bot.command(name="modlist")
@@ -91,5 +114,9 @@ async def member_stats(ctx : commands.Context):
             f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
     else :
         await ctx.send("```Command is blocked for now```")
+
+@bot.command(name="startc4")
+async def connect4play(ctx : commands.Context, player1, player2) :
+    pass
 
 bot.run(token)
