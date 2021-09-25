@@ -12,7 +12,8 @@ from modules_states import states
 modules = {
     "sarcasm" : None,
     "stats" : None,
-    "connect4" :None 
+    "connect4" : None,
+    "poll" : None
 }
 
 
@@ -142,5 +143,15 @@ async def connect4play(ctx : commands.Context, col) :
         await g.play(ctx, col)
     else :
         await ctx.send("```Command is blocked for now```")
+
+
+@bot.command(name="pollRead")
+async def connect4play(ctx : commands.Context, id : int) :
+    if modules["poll"] :
+        p = modules["poll"]
+        await p.analyseMessage(ctx, id)
+    else :
+        await ctx.send("```Command is blocked for now```")
+
 
 bot.run(token)
