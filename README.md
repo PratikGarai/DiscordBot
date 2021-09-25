@@ -5,7 +5,8 @@ A personal discord bot
 ## Planned features 
 - [x] Server member count
 - [x] Server member stats 
-- [x] Sarcasm detection 
+- [x] Sarcasm detection
+- [x] Vote counter and analysis 
 - [ ] Emotion detection
 - [ ] Web interface to limit channels
 - [ ] Database connection
