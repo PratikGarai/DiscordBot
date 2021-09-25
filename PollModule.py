@@ -6,20 +6,21 @@ class PollModule :
         pass
 
     async def analyseMessage(self, ctx : commands.Context, id : int) :
+        tick = "✔️"
+
         msg : discord.Message = await ctx.fetch_message(id)
         reactions = msg.reactions
 
-        resp = "<table><thead>"
+        emjs = []
+        mxl = 0
         users = set({})
         for reaction in reactions :
-            resp += f"<th>{reaction.emoji}</th>"
+            emjs.append(reaction.emoji)
             usrs = await reaction.users().flatten()
             for i in usrs : 
                 if i not in users :
                     users.add(i)
-        
-        resp+="</thead><tbody>"
-        tick = "✔️"
+                    mxl = max(mxl, len(i.display_name))
 
         table = { user : ["" for i in reactions] for user in users }
         for ind, reaction in enumerate(reactions) : 
@@ -27,13 +28,22 @@ class PollModule :
             for user in usrs :
                 table[user][ind] = tick
         
-        for user, reaction in table.items() :
-            resp += f"<tr><td>{user.display_name}</td>"
-            for r in reaction :
-                resp += f"<td>{r}</td>"
-            resp += "</tr>"
-        
-        resp += "</tbody></table>"
+        mxl += 4
+        head = "+"+"="*mxl
+        row1 = f'|{str.center("Name", mxl)}|'
+        for emj in emjs : 
+            head += "+"+"="*5
+            row1 += f'{str.center(emj, 4)}|'
+        head += "+"
 
-        # await ctx.send(f"```html{resp}```")
-        print(resp)
+        t = f"{head}\n{row1}\n{head}\n"
+        
+        for user, reaction in table.items() :
+            row = f'|{str.center(user.display_name, mxl)}|'
+            for r in reaction :
+                row += f'{str.center("x" if r!="" else " ", 5)}|'
+            t += row+"\n"
+        
+        t += head
+
+        await ctx.send(f"```{t}```")
