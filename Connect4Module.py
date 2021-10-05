@@ -126,7 +126,9 @@ class Connect4 :
                     return True
     
     def show_table(self) :
-        msg = "\n```\nBoard state : \n\n" + (2*self.cols+1)*"-"+"\n"
+        msg = "\n```\nBoard state :"
+        msg += "\n\n"
+        msg += (2*self.cols+1)*"-"+"\n"
         for i in self.board[::-1] :
             msg += "|" 
             for j in i :
