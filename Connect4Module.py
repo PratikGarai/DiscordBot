@@ -29,7 +29,6 @@ class Connect4 :
         return True
 
     async def play(self, ctx:commands.Context, col) :
-        col = int(col)
         if not self.ongoing :
             await ctx.message.add_reaction("🔴")
             await ctx.send("```No game is being played right now```") 
@@ -46,6 +45,7 @@ class Connect4 :
             await ctx.message.add_reaction("🔴")
             await ctx.send("```Sorry, not your turn now```") 
             return
+        col = int(col)
         if col<1 or col>self.cols :
             await ctx.message.add_reaction("🔴")
             await ctx.send("```Invalid column, please try again```")
