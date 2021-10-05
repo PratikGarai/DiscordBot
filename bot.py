@@ -10,7 +10,7 @@ admin_id = int(open("admin_id.txt", "r").read())
 from modules_states import states
 
 modules = {
-    "sarcasm" : None,
+    # "sarcasm" : None,
     "stats" : None,
     "connect4" : None,
     "poll" : None
@@ -90,9 +90,9 @@ async def member_count(ctx : commands.Context):
         s = "```Here is the list of available modules :"
         for ind, i in enumerate(modules.keys()) :
             if modules[i] :
-                s += f"\n\t{ind}.\t(ON)  {i}"
+                s += f"\n\t{ind+1}.\t(ON)  {i}"
             else :
-                s += f"\n\t{ind}.\t(OFF) {i}"
+                s += f"\n\t{ind+1}.\t(OFF) {i}"
         s += "\n```"
         await ctx.send(s)
     else :
@@ -116,6 +116,7 @@ async def member_stats(ctx : commands.Context):
             f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
     else :
         await ctx.send("```Command is blocked for now```")
+
 
 @bot.command(name="startc4")
 async def connect4play(ctx : commands.Context, player1, player2) :
