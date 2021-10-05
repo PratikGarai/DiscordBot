@@ -58,14 +58,13 @@ class Connect4 :
         await ctx.message.add_reaction("🟢")
         self.board[row][col-1] = self.turn+1
 
-        for i in self.board :
-            print(i)
-        print("\n\n")
+        tbl = self.show_table()
+
         if self.winning_move(self.turn+1) :
             if self.turn==0 :
-                await ctx.send(f"{self.player1} has won!")
+                await ctx.send(f"{tbl}{self.player1} has won!")
             else :
-                await ctx.send(f"{self.player2} has won!")
+                await ctx.send(f"{tbl}{self.player2} has won!")
             self.ongoing = False
             self.player1 = ""
             self.player2 = ""
@@ -79,9 +78,9 @@ class Connect4 :
         
         self.turn = (self.turn+1)%2
         if self.turn==0 :
-            await ctx.send(f"{self.player1}'s turn now")
+            await ctx.send(f"{tbl}{self.player1}'s turn now")
         else :
-            await ctx.send(f"{self.player2}'s turn now")
+            await ctx.send(f"{tbl}{self.player2}'s turn now")
 
 
     def getNextOpenRow(self, col) :
@@ -125,3 +124,15 @@ class Connect4 :
                     self.board[r-2][c+2]==piece and \
                     self.board[r-3][c+3]==piece :
                     return True
+    
+    def show_table(self) :
+        msg = "\n```\nBoard state : \n\n" + (2*self.cols+1)*"-"+"\n"
+        for i in self.board[::-1] :
+            msg += "|" 
+            for j in i :
+                msg += "x|" if j==1 else "o|" if j==2 else " |"
+            msg += "\n"
+        msg += (2*self.cols+1)*"-"
+        msg += "```" 
+
+        return msg
