@@ -12,21 +12,35 @@ class Connect4 :
         self.cols = 7
         self.board = np.zeros((self.rows,self.cols))
         self.turn = 0
+
     
-    def start_game(self, p1, p2) :
+    async def start_game(self, ctx: commands.Context, p1, p2) :
+        if self.ongoing :
+            await ctx.message.add_reaction("🔴")
+            await ctx.send(f"Sorry, ongoing game between {self.player1} and {self.player2}")
+            return
+
         if p1==p2 :
-            return False
+            await ctx.message.add_reaction("🔴")
+            await ctx.send("Invalid players to start game")
+            return
+            
         try :
             c1 = int(p1[3:-1])
             c2 = int(p2[3:-1])
         except :
-            return False
+            await ctx.message.add_reaction("🔴")
+            await ctx.send("Invalid players to start game")
+            return
+
         self.ongoing = True
         self.player1 = p1
         self.player2 = p2
         self.id1 = c1
         self.id2 = c2
-        return True
+        await ctx.message.add_reaction("🟢")
+        await ctx.send(f"Starting game between {self.player1} and {self.player2}\n{self.player1}'s turn now")
+
 
     async def play(self, ctx:commands.Context, col) :
         if not self.ongoing :
@@ -87,6 +101,7 @@ class Connect4 :
         for r in range(self.cols):
             if self.board[r][col]==0:
                 return r
+
     
     def winning_move(self, piece):
         # Horizontal check
@@ -124,6 +139,7 @@ class Connect4 :
                     self.board[r-2][c+2]==piece and \
                     self.board[r-3][c+3]==piece :
                     return True
+                    
     
     def show_table(self) :
         msg = "\n```\nBoard state :"
