@@ -13,5 +13,5 @@ A personal discord bot
 - [ ] Track user stats of good and bad words usage
 - [ ] Chatbot
 - [ ] Music
-- [ ] Connect 4 game + image generation
-- [ ] Tic tac toe + image generation
+- [x] Connect 4 game + show board
+- [ ] Tic tac toe + show board
