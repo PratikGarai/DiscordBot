@@ -91,16 +91,25 @@ async def member_count(ctx : commands.Context):
 @bot.command(name="mcount")
 async def member_count(ctx : commands.Context):
     if await checkModuleBlocked(ctx, modules, "stats"):
-        count = await modules["stats"].memberCounter(ctx)
-        await ctx.send(f"```Member count : {count}```")
+        await modules["stats"].memberCounter(ctx)
 
 
 @bot.command(name="mstats")
 async def member_stats(ctx : commands.Context):
     if await checkModuleBlocked(ctx, modules, "stats"):
-        online, offline, idle, members = await modules["stats"].memberStatistics(ctx)
-        await ctx.send(
-            f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
+        await modules["stats"].memberStatistics(ctx)
+
+
+@bot.command(name="mcountHere")
+async def member_count(ctx : commands.Context):
+    if await checkModuleBlocked(ctx, modules, "stats"):
+        await modules["stats"].memberCounterHere(ctx)
+
+
+@bot.command(name="mstatsHere")
+async def member_stats(ctx : commands.Context):
+    if await checkModuleBlocked(ctx, modules, "stats"):
+        await modules["stats"].memberStatisticsHere(ctx)
 
 
 @bot.command(name="startc4")
