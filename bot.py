@@ -4,7 +4,8 @@ from discord.ext import commands
 intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
-admin_id = int(open("admin_id.txt", "r").read())
+
+from utils import admin
 
 
 from modules_states import states
@@ -43,7 +44,7 @@ async def on_message(message : discord.Message) :
 
 @bot.command(name="toggle")
 async def toggler(ctx : commands.Context, module : str):
-    if ctx.author.id!=admin_id :
+    if not admin.isAdmin(ctx.author.id) :
         await ctx.message.add_reaction("⛔")
         await ctx.send(f"```Sorry, you do not have such authority. 👮```")
     else :
@@ -61,7 +62,7 @@ async def toggler(ctx : commands.Context, module : str):
     
 @bot.command(name="modAllOn")
 async def allOn(ctx : commands.Context):
-    if ctx.author.id!=admin_id :
+    if not admin.isAdmin(ctx.author.id) :
         await ctx.message.add_reaction("⛔")
         await ctx.send(f"```Sorry, you do not have such authority. 👮```")
     else :
@@ -73,7 +74,7 @@ async def allOn(ctx : commands.Context):
 
 @bot.command(name="modAllOff")
 async def allOff(ctx : commands.Context):
-    if ctx.author.id!=admin_id :
+    if not admin.isAdmin(ctx.author.id) :
         await ctx.message.add_reaction("⛔")
         await ctx.send(f"```Sorry, you do not have such authority. 👮```")
     else :
