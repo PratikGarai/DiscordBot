@@ -7,7 +7,6 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 from utils import admin
 
-
 from modules_states import states
 
 modules = {
@@ -27,7 +26,6 @@ async def on_ready() :
 async def on_message(message : discord.Message) :
     if message.author==bot.user :
         return 
-    
     try : 
         if not message.content[0].isalpha() :
             return 
@@ -44,11 +42,7 @@ async def on_message(message : discord.Message) :
 
 @bot.command(name="toggle")
 async def toggler(ctx : commands.Context, module : str):
-    if not admin.isAdmin(ctx.author.id) :
-        await ctx.message.add_reaction("⛔")
-        await ctx.send(f"```Sorry, you do not have such authority. 👮```")
-    else :
-        await ctx.message.add_reaction("👌")
+    if await admin.adminVerifyAndReact(ctx) :
         if module in modules : 
             if modules[module] :
                 new_state = "off"
@@ -62,11 +56,7 @@ async def toggler(ctx : commands.Context, module : str):
     
 @bot.command(name="modAllOn")
 async def allOn(ctx : commands.Context):
-    if not admin.isAdmin(ctx.author.id) :
-        await ctx.message.add_reaction("⛔")
-        await ctx.send(f"```Sorry, you do not have such authority. 👮```")
-    else :
-        await ctx.message.add_reaction("👌")
+    if await admin.adminVerifyAndReact(ctx) :
         for module in modules : 
             modules[module] = states[module]
         await ctx.send(f"```Sure sir! 👍\nTurned on all modules```")
@@ -74,11 +64,7 @@ async def allOn(ctx : commands.Context):
 
 @bot.command(name="modAllOff")
 async def allOff(ctx : commands.Context):
-    if not admin.isAdmin(ctx.author.id) :
-        await ctx.message.add_reaction("⛔")
-        await ctx.send(f"```Sorry, you do not have such authority. 👮```")
-    else :
-        await ctx.message.add_reaction("👌")
+    if await admin.adminVerifyAndReact(ctx) :
         for module in modules : 
             modules[module] = None
         await ctx.send(f"```Sure sir! 👍\nTurned off all modules```")
