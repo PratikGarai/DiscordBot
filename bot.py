@@ -5,7 +5,8 @@ intents = discord.Intents.all()
 token = open("token.txt", "r").read()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-from utils import admin
+from utils.admin_utils import adminVerifyAndReact
+from utils.module_utils import checkModuleBlocked
 
 from modules_states import states
 
@@ -42,7 +43,7 @@ async def on_message(message : discord.Message) :
 
 @bot.command(name="toggle")
 async def toggler(ctx : commands.Context, module : str):
-    if await admin.adminVerifyAndReact(ctx) :
+    if await adminVerifyAndReact(ctx) :
         if module in modules : 
             if modules[module] :
                 new_state = "off"
@@ -53,10 +54,11 @@ async def toggler(ctx : commands.Context, module : str):
             await ctx.send(f"```Sure sir! 👍\nTurned {new_state} module : {module}```")
         else :
             await ctx.send(f"```Sorry sir, that module doesn't exist. 🙁```")
+
     
 @bot.command(name="modAllOn")
 async def allOn(ctx : commands.Context):
-    if await admin.adminVerifyAndReact(ctx) :
+    if await adminVerifyAndReact(ctx) :
         for module in modules : 
             modules[module] = states[module]
         await ctx.send(f"```Sure sir! 👍\nTurned on all modules```")
@@ -64,7 +66,7 @@ async def allOn(ctx : commands.Context):
 
 @bot.command(name="modAllOff")
 async def allOff(ctx : commands.Context):
-    if await admin.adminVerifyAndReact(ctx) :
+    if await adminVerifyAndReact(ctx) :
         for module in modules : 
             modules[module] = None
         await ctx.send(f"```Sure sir! 👍\nTurned off all modules```")
@@ -88,48 +90,38 @@ async def member_count(ctx : commands.Context):
 
 @bot.command(name="mcount")
 async def member_count(ctx : commands.Context):
-    if modules["stats"] :
+    if await checkModuleBlocked(ctx, modules, "stats"):
         count = await modules["stats"].memberCounter(ctx)
         await ctx.send(f"```Member count : {count}```")
-    else :
-        await ctx.send("```Command is blocked for now```")
 
 
 @bot.command(name="mstats")
 async def member_stats(ctx : commands.Context):
-    if modules["stats"] :
+    if await checkModuleBlocked(ctx, modules, "stats"):
         online, offline, idle, members = await modules["stats"].memberStatistics(ctx)
         await ctx.send(
             f"```Members \t\t: {len(members)}\nOnline members  : {online}\nOffline members : {offline}\nIdle/Hidden \t: {idle}```")
-    else :
-        await ctx.send("```Command is blocked for now```")
 
 
 @bot.command(name="startc4")
 async def connect4play(ctx : commands.Context, player1, player2) :
-    if modules["connect4"] :
+    if await checkModuleBlocked(ctx, modules, "connect4"):
         g = modules["connect4"]
         await g.start_game(ctx, player1, player2)
-    else :
-        await ctx.send("```Command is blocked for now```")
 
 
 @bot.command(name="playc4")
 async def connect4play(ctx : commands.Context, col) :
-    if modules["connect4"] :
+    if await checkModuleBlocked(ctx, modules, "connect4"):
         g = modules["connect4"]
         await g.play(ctx, col)
-    else :
-        await ctx.send("```Command is blocked for now```")
 
 
 @bot.command(name="pollRead")
 async def connect4play(ctx : commands.Context, id : int) :
-    if modules["poll"] :
+    if await checkModuleBlocked(ctx, modules, "poll"):
         p = modules["poll"]
         await p.analyseMessage(ctx, id)
-    else :
-        await ctx.send("```Command is blocked for now```")
 
 
 bot.run(token)
