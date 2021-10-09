@@ -5,10 +5,10 @@ class PollModule :
     def __init__(self) :
         pass
 
-    async def analyseMessage(self, ctx : commands.Context, id : int) :
+    async def analyseMessage(self, ctx : commands.Context) :
         tick = "✔️"
 
-        msg : discord.Message = await ctx.fetch_message(id)
+        msg : discord.Message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
         reactions = msg.reactions
 
         emjs = []

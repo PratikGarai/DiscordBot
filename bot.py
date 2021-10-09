@@ -73,7 +73,7 @@ async def allOff(ctx : commands.Context):
 
 
 @bot.command(name="modList")
-async def member_count(ctx : commands.Context):
+async def modules_list(ctx : commands.Context):
     await ctx.message.add_reaction("👌")
     if len(modules.keys())!=0 :
         s = "```Here is the list of available modules :"
@@ -101,19 +101,19 @@ async def member_stats(ctx : commands.Context):
 
 
 @bot.command(name="mcountHere")
-async def member_count(ctx : commands.Context):
+async def member_countHere(ctx : commands.Context):
     if await checkModuleBlocked(ctx, modules, "stats"):
         await modules["stats"].memberCounterHere(ctx)
 
 
 @bot.command(name="mstatsHere")
-async def member_stats(ctx : commands.Context):
+async def member_statsHere(ctx : commands.Context):
     if await checkModuleBlocked(ctx, modules, "stats"):
         await modules["stats"].memberStatisticsHere(ctx)
 
 
 @bot.command(name="startc4")
-async def connect4play(ctx : commands.Context, player1, player2) :
+async def connect4start(ctx : commands.Context, player1, player2) :
     if await checkModuleBlocked(ctx, modules, "connect4"):
         g = modules["connect4"]
         await g.start_game(ctx, player1, player2)
@@ -127,10 +127,10 @@ async def connect4play(ctx : commands.Context, col) :
 
 
 @bot.command(name="pollRead")
-async def connect4play(ctx : commands.Context, id : int) :
+async def readPoll(ctx : commands.Context) :
     if await checkModuleBlocked(ctx, modules, "poll"):
         p = modules["poll"]
-        await p.analyseMessage(ctx, id)
+        await p.analyseMessage(ctx)
 
 
 bot.run(token)
